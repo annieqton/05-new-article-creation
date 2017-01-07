@@ -19,6 +19,10 @@ Article.prototype.toHtml = function() {
   // REVIEW: Here's where the marked library is used
   this.body = marked(this.body);     //eslint-disable-line
 
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+
   return template(this);
 };
 

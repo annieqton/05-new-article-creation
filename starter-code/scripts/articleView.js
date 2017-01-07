@@ -1,5 +1,11 @@
 'use strict';
 
+$(document).ready(function() {
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+});
+
 // Configure a view object, to hold all our functions for dynamic updates and article-related event handlers.
 var articleView = {};
 
@@ -95,7 +101,7 @@ articleView.create = function() {
     author: $('#article-author').val(),
     authorUrl: $('#art.icle-author-url').val(),
     category: $('#article-category').val(),
-    publishedOn: $('#article-published:checked').length ? (new Date().toISOString().slice(0,10)) : 'draft'
+    publishedOn: $('#article-published:checked').length ? new Date() : null
   };
 
   // DONE: Use our interface to the Handblebars template to put this new article into the DOM:
@@ -103,7 +109,9 @@ articleView.create = function() {
   console.log(tempObject.toHtml);
   $('#articles').append(tempObject.toHtml());
 
-  // TODO: Activate the highlighting of any code blocks:
+  // DONE: Activate the highlighting of any code blocks:
+    //Placed at the top of the page so it's not within the .create method.
+    //Also added the css link in index.html so highlighing occurs there as well.
 
   // DONE: Export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
   $('#article-json').val(JSON.stringify(tempObject));
