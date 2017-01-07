@@ -1,5 +1,11 @@
 'use strict';
 
+$(document).ready(function() {
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+});
+
 // Configure a view object, to hold all our functions for dynamic updates and article-related event handlers.
 var articleView = {};
 
@@ -65,28 +71,51 @@ articleView.setTeasers = function() {
 };
 
 articleView.initNewArticlePage = function() {
-  // TODO: Ensure the main .tab-content area is revealed. We might add more tabs later.
+  // DONE: Ensure the main .tab-content area is revealed. We might add more tabs later.
+  $('#tab-content').show();
 
-  // TODO: The new articles we create will be copy/pasted into our source data file.
+  // DONE: The new articles we create will be copy/pasted into our source data file.
   // Set up this "export" functionality. We can hide the export field for now, and show it once we have data to export.
+  $('#article-export').hide();
+  $('#new-form').on('change', function() {
+    $('#article-export').show();
+    articleView.create();
+  })
 
-  // TODO: Add an event listener/handler to update the preview and the export field if any inputs change.
+  // DONE: Add an event listener/handler to update the preview and the export field if any inputs change.
+  $('#article-json').on('click', function() {
+    $(this).select();
+  })
 };
 
 articleView.create = function() {
-  // TODO: Set up a var to hold the new article we are creating.
+  // DONE: Set up a var to hold the new article we are creating.
   // Clear out the #articles element, so we can put in the updated preview
+  var $newArticleData = {};
+  $('#articles').empty();
 
-  // TODO: Instantiate an article based on what's in the form fields:
+  // DONE: Instantiate an article based on what's in the form fields:
+  $newArticleData = {
+    title: $('#article-title').val(),
+    body: $('#article-body').val(),
+    author: $('#article-author').val(),
+    authorUrl: $('#art.icle-author-url').val(),
+    category: $('#article-category').val(),
+    publishedOn: $('#article-published:checked').length ? new Date() : null
+  };
 
-  // TODO: Use our interface to the Handblebars template to put this new article into the DOM:
+  // DONE: Use our interface to the Handblebars template to put this new article into the DOM:
+  var tempObject = new Article($newArticleData);
+  console.log(tempObject.toHtml);
+  $('#articles').append(tempObject.toHtml());
 
-  // TODO: Activate the highlighting of any code blocks:
+  // DONE: Activate the highlighting of any code blocks:
+    //Placed at the top of the page so it's not within the .create method.
+    //Also added the css link in index.html so highlighing occurs there as well.
 
-  // TODO: Export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
-};
-
-
+  // DONE: Export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
+  $('#article-json').val(JSON.stringify(tempObject));
+}
 articleView.initIndexPage = function() {
   articleView.populateFilters();
   articleView.handleCategoryFilter();
